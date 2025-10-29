@@ -74,19 +74,23 @@ function generateCountdownBlocks() {
 
 
 async function postScheduledMessage() {
-  const blocks = generateCountdownBlocks();
-  const text = `Here's your daily countdown to ${EVENT_NAME}.`;
+    if (!SLACK_CHANNEL_ID) {
+        console.error('SLACK_CHANNEL_ID is not set. Cannot post scheduled message.');
+        return; 
+    }
+    const blocks = generateCountdownBlocks();
+    const text = `Here's your daily countdown to ${EVENT_NAME}.`;
 
-  try {
-    await app.client.chat.postMessage({
-      token: SLACK_BOT_TOKEN,
-      channel: SLACK_CHANNEL_ID,
-      blocks: blocks,
-      text: text 
-    });
-  } catch (error) { 
-    console.error('Error sending scheduled message:', error.data || error);
-  }
+    try {
+        await app.client.chat.postMessage({
+            token: SLACK_BOT_TOKEN,
+            channel: SLACK_CHANNEL_ID,
+            blocks: blocks,
+            text: text 
+        });
+    } catch (error) { 
+        console.error('Error sending scheduled message:', error.data || error);
+    }
 }
 
 
@@ -115,4 +119,4 @@ app.get('/trigger-daily-post', async (req, res) => {
 (async () => {
   const port = process.env.PORT || 3000;
   await app.start(port);
-})();
+})(); 
