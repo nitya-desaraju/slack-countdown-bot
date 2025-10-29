@@ -1,0 +1,16 @@
+{
+  "name": "slack-countdown-bot",
+  "version": "1.0.0",
+  "description": "A Slack bot that responds to /countdown and posts a daily update for Parthenon.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@slack/bolt": "^3.19.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
