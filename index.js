@@ -44,26 +44,18 @@ function generateCountdownBlocks() {
     ];
   }
 
-  const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const totalHours = Math.floor(diffTime / (1000 * 60 * 60));
-  const remainingHours = totalHours % 24;
 
-  const targetDateStr = targetDate.toLocaleString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    timeZoneName: 'short',
-  });
+  const days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diffTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((diffTime % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((diffTime % (1000 * 60)) / 1000);
 
   return [
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `⏳ *Countdown to ${eventName}* ⏳`
+        "text": `⏳Countdown to ${eventName}! ✨:parthenon-logo:`
       }
     },
     {
@@ -71,14 +63,10 @@ function generateCountdownBlocks() {
     },
     {
       "type": "section",
-      "fields": [
-        { "type": "mrkdwn", "text": `*Days Left:*` },
-        { "type": "mrkdwn", "text": `*${totalDays}*` },
-        { "type": "mrkdwn", "text": `*Hours Left:*` },
-        { "type": "mrkdwn", "text": `*${remainingHours}* (of ${totalHours} total)` },
-        { "type": "mrkdwn", "text": `*Event Date:*` },
-        { "type": "plain_text", "text": `${targetDateStr}` },
-      ]
+      "text": {
+        "type": "mrkdwn",
+        "text": `*${days}* days, *${hours}* hours, *${minutes}* minutes, *${seconds}* seconds left!`
+      }
     }
   ];
 }
