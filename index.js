@@ -38,8 +38,19 @@ function generateCountdownBlocks() {
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": `🎉 *${eventName} has started!* 🎉\nThe countdown is over!`
+          "text": `🎉 *${eventName.toUpperCase()} HAS COMMENCED!* 🎉`
         }
+      },
+      {
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": ":athena-nyc-orpheus: Happy Hacking! :athena-award:"
+        }
+      },
+      {
+        "type": "mrkdwn",
+        "text": ":laptop_parrot: :laptop_parrot: :laptop_parrot:"
       }
     ];
   }
@@ -65,7 +76,7 @@ function generateCountdownBlocks() {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": `*${days}* days, *${hours}* hours, *${minutes}* minutes, *${seconds}* seconds left!`
+        "text": `*${days}* days, *${hours}* hours, *${minutes}* minutes, and *${seconds}* seconds left!`
       }
     }
   ];
