@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { App } = require('@slack/bolt');
+const { App, ExpressReceiver } = require('@slack/bolt');
 
 //configs
 const {
@@ -11,10 +11,18 @@ const {
   CRON_SECRET
 } = process.env;
 
+if (!SLACK_BOT_TOKEN || !SLACK_SIGNING_SECRET) {
+  console.error('Error: SLACK_BOT_TOKEN and SLACK_SIGNING_SECRET must be set.');
+}
+
+const receiver = new ExpressReceiver({
+  signingSecret: SLACK_SIGNING_SECRET,
+});
+
 
 const app = new App({
   token: SLACK_BOT_TOKEN,
-  signingSecret: SLACK_SIGNING_SECRET,
+  receiver: receiver,
 });
 
 function generateCountdownBlocks() {
@@ -72,27 +80,26 @@ function generateCountdownBlocks() {
   ];
 }
 
-
 async function postScheduledMessage() {
-    if (!SLACK_CHANNEL_ID) {
-        console.error('SLACK_CHANNEL_ID is not set. Cannot post scheduled message.');
-        return; 
-    }
-    const blocks = generateCountdownBlocks();
-    const text = `Here's your daily countdown to ${EVENT_NAME}.`;
+  if (!SLACK_CHANNEL_ID) {
+    console.error('SLACK_CHANNEL_ID is not set. Cannot post scheduled message.');
+    return;
+  }
 
-    try {
-        await app.client.chat.postMessage({
-            token: SLACK_BOT_TOKEN,
-            channel: SLACK_CHANNEL_ID,
-            blocks: blocks,
-            text: text 
-        });
-    } catch (error) { 
-        console.error('Error sending scheduled message:', error.data || error);
-    }
+  const blocks = generateCountdownBlocks();
+  const text = `Here's your daily countdown for ${EVENT_NAME}.`;
+
+  try {
+    await app.client.chat.postMessage({
+      token: SLACK_BOT_TOKEN,
+      channel: SLACK_CHANNEL_ID,
+      blocks: blocks,
+      text: text 
+    });
+  } catch (error) { 
+    console.error('Error sending scheduled message:', error.data || error);
+  }
 }
-
 
 app.command('/countdown', async ({ command, ack, say }) => {
   await ack();
@@ -104,8 +111,8 @@ app.command('/countdown', async ({ command, ack, say }) => {
   });
 });
 
+receiver.app.get('/trigger-daily-post', async (req, res) => {
 
-app.get('/trigger-daily-post', async (req, res) => {
   if (req.query.secret !== CRON_SECRET) {
     console.warn('Unauthorized cron trigger attempt.');
     return res.status(401).send('Unauthorized');
@@ -116,7 +123,8 @@ app.get('/trigger-daily-post', async (req, res) => {
 });
 
 
+
 (async () => {
   const port = process.env.PORT || 3000;
   await app.start(port);
-})(); 
+})();
