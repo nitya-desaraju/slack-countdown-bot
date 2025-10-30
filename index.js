@@ -49,8 +49,11 @@ function generateCountdownBlocks() {
         }
       },
       {
-        "type": "mrkdwn",
-        "text": ":laptop_parrot: :laptop_parrot: :laptop_parrot:"
+        "type": "section",
+        "text": {
+          "type": "mrkdwn",
+          "text": ":laptop_parrot: :laptop_parrot: :laptop_parrot:"
+        }
       }
     ];
   }
