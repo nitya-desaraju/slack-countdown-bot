@@ -127,9 +127,12 @@ receiver.app.get('/trigger-daily-post', async (req, res) => {
   res.status(200).send('Scheduled message triggered successfully.');
 });
 
-
+receiver.app.get('/ping', (req, res) => {
+  res.status(200).send('wake up brochacho');
+});
 
 (async () => {
   const port = process.env.PORT || 3000;
   await app.start(port);
+  console.log(`Keep-awake ping URL: /ping`);
 })();
