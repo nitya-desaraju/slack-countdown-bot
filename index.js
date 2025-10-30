@@ -48,11 +48,14 @@ function generateCountdownBlocks() {
   const totalHours = Math.floor(diffTime / (1000 * 60 * 60));
   const remainingHours = totalHours % 24;
 
-  const targetDateStr = targetDate.toLocaleString(undefined, {
+  const targetDateStr = targetDate.toLocaleString('en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    timeZoneName: 'short',
   });
 
   return [
